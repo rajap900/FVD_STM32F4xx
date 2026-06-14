@@ -32,6 +32,7 @@
 typedef enum
 {
     MOTOR_STATE_IDLE = 0,
+    MOTOR_STATE_SAFETY_TEST,   /* NEW: Power-up self-test */
     MOTOR_STATE_PRECHARGE,
     MOTOR_STATE_CALIB,
     MOTOR_STATE_RUN,
@@ -48,6 +49,7 @@ typedef enum
     MOTOR_FAULT_OVERVOLTAGE,
     MOTOR_FAULT_BOOTSTRAP,
     MOTOR_FAULT_ESTOP,
+    MOTOR_FAULT_SAFETY_TEST,   /* NEW: Safety test failed */
     MOTOR_FAULT_UNKNOWN
 } Motor_Fault_t;
 
@@ -104,6 +106,10 @@ typedef struct
     uint32_t      phase_t0_ms;
     int32_t       ramp_frac;               /* sub-0.1Hz ramp accumulator     */
     Motor_Fault_t last_fault;
+    
+    /* NEW: Error latching state */
+    uint8_t       error_latched;           /* 1 = خطأ مكبوت من SENSOR/SAFETY */
+    uint32_t      error_latch_ms;
 } Motor_Handle_t;
 
 /* ---- lifecycle ------------------------------------------------------------ */
